@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>게시판 작업</h1>
+  <div id="app">
+    <table class="table">
+      <thead>
+        <tr>
+          <td><strong>이름</strong></td>
+          <td><strong>직업</strong></td>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(row, index) in rows">
+          <td><input type="text" v-model="row.name"></td>
+          <td><input type="text" v-model="row.username"></td>
+          <td><button v-on:click="deleteRow(index)">삭제하기</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button class="button btn-primary" @click="addRow">행 추가하기</button>
+    </div>
+  </div>
+</body>
+
+</html>
+<script>
+
+  var app = new Vue({
+    el: "#app",
+    data: {
+      rows: [
+        // { name: "최정회", job: "입력해주세요." },
+        // { name: "홍길동", job: "입력해주세요." }
+      ]
+    },
+    mounted() {
+      this.getData();
+    },
+    methods: {
+
+      getData: function () {
+
+        var vm = this;
+        console.log("호출 받아짐.")
+        axios.get('https://jsonplaceholder.typicode.com/users/')
+          .then(function (response) {
+            console.log(response.data);
+            vm.rows = response.data;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      addRow: function () {
+        this.rows.push({ name: "", username: "" });
+        console.log('추가됨');
+      },
+      deleteRow: function (index) {
+        console.log(index);
+
+        this.rows.splice(index, 1);
+
+      }
+    }
+  });
+</script>
