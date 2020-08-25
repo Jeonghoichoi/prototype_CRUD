@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+    <div id="app">
+      <!-- <app-vinding v-bind:프롭스 속성이름 = "상위 컴포넌트의 데이터 이름">프롭스 데이터 처리</app-vinding> -->
+      <!-- <app-update v-on:하위 컴포넌트에서 발생한 이벤트 이름 = "상위 컴포넌트의 메서드 이름">이벤트처리</app-update> -->
+      <!-- <app-header v-bind:propsdata="massage"></app-header> -->
+      <app-update v-on:update = "logText"></app-update>     
+      <!-- <app-update v-bind:propsdate="massage"></app-update> -->
+    </div>
+
+    <div id="app2">
+      <app-delete v-on:delete = "logText"></app-delete>  
+      <!-- <app-delete v-bind:propsdata="massage"></app-delete> -->
+    </div>
+
+    <div id="app3">
+
+      <router-view></router-view>
+      <router-link to="/login">Login</router-link>
+      <router-link to="/main">Main</router-link>
+
+    </div>
+
+  <script>  
+
+    // Vue.component('app-header', {     
+    //   template: '<h1>헤더영역입니다.</h1>'
+    // });
+
+
+    // new Vue({
+
+
+    //   el: '#app',
+    //   components : {
+    //     'app-footer' : {
+    //       template : '<footer>footer영역입니다.</footer>'
+    //     },
+    //     'app-content' :{
+    //       template : '<content>content영역입니다.</content>'
+    //     }
+    //   },
+      
+    // });
+
+    var LoginComponent = {
+
+      template: '<div>login</div>'
+    }
+
+    var Maincomponent = {
+
+      template: '<div>url maincomponent</div>'
+    }
+
+    var router = new VueRouter({
+      mode: 'history',
+      routes : [
+      // 로그인 페이지 URL
+      {
+        path: '/login',
+
+        // 해당 URL에서 표시될 컴포넌트
+        component: LoginComponent
+
+      },
+      {
+       path: '/main',
+       component: Maincomponent 
+
+      }
+
+      ]
+
+    });
+
+    new Vue({
+
+    el: '#app3',
+    router: router
+
+    });
+
+
+    
+
+    var appdelete = {
+      template : '<button v-on:click="deleteEvent">데이터 삭제</button>',
+      methods : {
+      deleteEvent: function() {
+        this.$emit('delete');
+       }
+     }
+    }
+    var appupdate = {
+      template : '<button v-on:click="updateEvent">데이터 수정</button>',
+      methods : {
+      updateEvent: function() {
+        this.$emit('update');
+       }
+     }
+    }
+    new Vue({
+
+      el: '#app2',
+      components : {
+        'app-delete' : appdelete
+      },
+      methods : {
+        logText : function() {
+          console.log('데이터를 삭제하는 로그');
+        }
+      },
+      data : {
+        massage : '데이터 처리합니다.'
+      }
+    })
+
+    new Vue({
+      el : '#app',
+      components : {
+        'app-update' : appupdate
+      },
+      methods : {
+        logText : function() {
+          console.log('데이터를 업데이트시키는 로그');
+        }
+      },
+      data : {
+        massage : '데이터를 업데이트 합니다.'
+      }
+    })
+      
+  </script>
+</body>
+</html>
